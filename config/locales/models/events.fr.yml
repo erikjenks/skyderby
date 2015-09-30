@@ -1,0 +1,14 @@
+fr:
+  activerecord:
+    models:
+      event: 'Compétition'
+    attributes:
+      event:
+        name: 'Nom'
+        status: 'Status'
+        place: 'Lieu'
+        starts_at: 'Commence à'
+  event_status: 
+    draft: 'En cours'
+    published: 'Publiée'
+    finished: 'Finie'

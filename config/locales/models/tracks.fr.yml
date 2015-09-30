@@ -1,0 +1,13 @@
+fr:
+  activerecord:
+    models:
+      track: 'Track'
+    attributes:
+      track:
+        id: '#'
+        name: 'Pilote'
+        suit: 'Combinaison'
+        place: 'Lieu'
+        comment: 'Commentaire'
+        uploaded_at: 'Téléchargé à'
+        recorded_at: 'Enregistré à'

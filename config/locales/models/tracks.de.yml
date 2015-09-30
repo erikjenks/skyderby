@@ -1,0 +1,14 @@
+de:
+  activerecord:
+    models:
+      track: 'Track'
+    attributes:
+      track:
+        id: '#'
+        name: 'Pilot'
+        suit: 'Anzug'
+        place: 'Ort'
+        comment: 'Kommentar'
+        uploaded_at: 'Uploaddatum'
+        recorded_at: 'Aufnahmdatum'
+

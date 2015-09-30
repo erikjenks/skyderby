@@ -1,0 +1,9 @@
+de:
+  activerecord:
+    models:
+      user_profile: 'Pilotenprofil'
+    attributes:
+      user_profile:
+        name: 'Vor- und Nachname'
+        country: 'Land'
+        userpic: 'Foto'

@@ -1,0 +1,8 @@
+de:
+  activerecord:
+    errors:
+      models:
+        event_track:
+          attributes:
+            result:
+              duplicate: 'Für diesen Teilnehmer sind die Ergebnisse in dieser Runde bereits hochgeladen worden. Bitte die Seite neu laden.'

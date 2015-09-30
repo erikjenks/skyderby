@@ -1,0 +1,15 @@
+de:
+  activerecord:
+    models:
+      event_sponsor: 'Sponsor'
+    attributes:
+      event_sponsor:
+        name: 'Name'
+        website: 'Webseite'
+        logo: 'Logo'
+    errors:
+      models:
+        event_sponsor:
+          attributes:
+            name:
+              blank: "Das Pflichfeld 'Name' muss ausgefüllt werden"

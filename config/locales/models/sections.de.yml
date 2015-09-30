@@ -1,0 +1,8 @@
+de:
+  activerecord:
+    errors:
+      models:
+        section:
+          attributes:
+            name:
+              blank: 'Das Pflichtfeld "Name" muss ausgefüllt werden'

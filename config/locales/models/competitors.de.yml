@@ -1,0 +1,15 @@
+de:
+  activerecord:
+    errors:
+      models:
+        competitor:
+          attributes:
+            wingsuit:
+              blank: "Das Pflichtfeld 'Anzug' muss ausgefüllt werden"
+            user_profile:
+              blank: "Das Pflichtfeld 'Pilotenprofil' muss ausgefüllt werden"
+            section:
+              blank: "Das Pflichtfeld 'Klasse' muss ausgefüllt werden"
+            base:
+              restrict_dependent_destroy:
+                many: 'Um den Teilnehmer löschen zu können, müssen erst seine Resultate entfernt werden'

@@ -1,0 +1,14 @@
+de:
+  activerecord:
+    models:
+      event: 'Wettkampf'
+    attributes:
+      event:
+        name: 'Name'
+        status: 'Status'
+        place: 'Ort'
+        starts_at: 'Datum des Starts'
+  event_status: 
+    draft: 'Vorbereitung'
+    published: 'Veröffentlicht'
+    finished: 'Fertig'

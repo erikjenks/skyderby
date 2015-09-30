@@ -1,0 +1,8 @@
+fr:
+  activerecord:
+    errors:
+      models:
+        section:
+          attributes:
+            name:
+              blank: '"Nom" doit être renseigné'

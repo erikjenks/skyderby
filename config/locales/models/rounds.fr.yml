@@ -1,0 +1,9 @@
+fr:
+  activerecord:
+    errors:
+      models:
+        round:
+          attributes:
+            base:
+              restrict_dependent_destroy:
+                many: 'Supprimer les résultats de la manche en premier'

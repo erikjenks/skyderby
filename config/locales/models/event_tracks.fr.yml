@@ -1,0 +1,8 @@
+fr:
+  activerecord:
+    errors:
+      models:
+        event_track:
+          attributes:
+            result:
+              duplicate: 'Pour cette manche ce compétiteur a déjà un résultat. Rafraîchir la page pour le voir'

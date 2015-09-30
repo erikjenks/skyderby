@@ -1,0 +1,9 @@
+de:
+  activerecord:
+    errors:
+      models:
+        round:
+          attributes:
+            base:
+              restrict_dependent_destroy:
+                many: 'Um die Runde zu löschen, müssten erst die Ergebnisse entfernt werden.'
