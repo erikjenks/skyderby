@@ -4,7 +4,7 @@
       = 'Rules: '
       = event.rules.humanize
     .comp-window
-      = 'Competition window: '
+      = t('events.show.comp_window') + ': '
       = "#{event.range_from} - #{event.range_to} #{t('units.m')}"
   .event-start-date.text-muted.text-center
     %span
