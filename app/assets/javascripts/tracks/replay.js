@@ -89,7 +89,7 @@ function data_on_time(cur_time) {
             v_speed: floor.v_speed,
             h_speed: floor.h_speed,
             gr: floor.glrat
-        }
+        };
     } else {
         var k = (time - (floor.fl_time_abs - TrackVideo.track_offset)) / ((+ceil.fl_time_abs) - (+floor.fl_time_abs));
         var v_speed = floor.v_speed + (ceil.v_speed - floor.v_speed) * k;
@@ -102,7 +102,7 @@ function data_on_time(cur_time) {
             v_speed: Math.round(v_speed),
             h_speed: Math.round(h_speed),
             gr: gr.toFixed(2)
-        }
+        };
     }
 }
 
