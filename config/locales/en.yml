@@ -53,10 +53,6 @@ en:
     update: "Update"
     delete: "Delete"
     edit: "Edit"
-  disciplines:
-    speed: 'Speed'
-    distance: 'Distance'
-    time: 'Time'
   virtual_competitions:
     tasks:
       speed: 'Task is to fly as fast as possible horizontally over the ground through the competition window (%{range_from} - %{range_to} m)'

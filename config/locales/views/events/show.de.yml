@@ -1,0 +1,33 @@
+de:
+  events:
+    show:
+      section: Klasse
+      competitor: Teilnehmer
+      round: Runde
+      round_map_view: Tracks der Runder auf der Karte
+      comp_window: Wettkampbereich
+      total: Insgesamt
+      profile: Profil
+      profile_caption: Das gesuchte Profil kann nicht gefunden werden?
+      toggle_profile: Neues Profil erstellen
+      profile_placeholder: Suchen Sie das Profil aus der Liste aus
+      profile_or: Oder
+      profile_choose: Suchen Sie das Profil aus der Liste aus
+      suit: Anzug
+      suit_placeholder: Suchen Sie den Anzug aus der Liste aus
+      new: Neu
+      edit: Korrektur
+      organizers: Organisatoren
+      organizers_placeholder: Suchen Sie den Organosator aus der Liste aus
+      place_placeholder: Suche Sie den Ort aus der Liste aus
+      result: Ergebnis
+      result_file: Datei mit Track
+      result_or: Oder
+      result_in: in
+      delete_result: Das Ergebnis entfernen
+      toggle_new_track: neuen Track hochladen
+      toggle_existed_track: vorhandenen Track aussuchen
+      event_sponsors: Wettkampfsponsoren
+      add_sponsor: Sponsor hinzufügen
+      judges: Richer
+      add_judge: Richter hinzufügen

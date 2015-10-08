@@ -1,5 +1,6 @@
 de:
   application:
     footer:
+      made_with: 'Gemacht mit'
       owner: 'Aleksandr Kunin'
       fb_page: "Facebook Seite"

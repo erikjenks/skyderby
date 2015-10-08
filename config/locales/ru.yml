@@ -44,10 +44,6 @@ ru:
     update: "Обновить"
     delete: "Удалить"
     edit: "Редактировать"
-  disciplines:
-    speed: 'Скорость'
-    distance: 'Дистанция'
-    time: 'Время'
   virtual_competitions:
     tasks:
       speed: 'Цель: лететь с максимально возможной горизонтальной скоростью находясь в зачетном окне (%{range_from} - %{range_to} м)'
