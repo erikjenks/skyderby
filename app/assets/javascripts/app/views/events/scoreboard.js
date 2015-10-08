@@ -10,9 +10,9 @@ Skyderby.views.Scoreboard = Backbone.View.extend({
     },
     
     units: {
-        distance: I18n.t('units.m'),
-        speed: I18n.t('units.kmh'),
-        time: I18n.t('units.t_unit')
+        distance: 'm',
+        speed: 'kmh',
+        time: 't_unit'
     },
 
     $discipline_row: null,
@@ -670,7 +670,7 @@ Skyderby.views.Scoreboard = Backbone.View.extend({
 
         var unit_cell =
             $('<td>')
-                .text(this.units[discipline])
+                .text(I18n.t('units.' + this.units[discipline]))
                 .addClass('text-center')
                 .attr('data-discipline', discipline)
                 .attr('data-role', 'unit')
