@@ -1,13 +1,4 @@
 de:
-  activerecord:
-    attributes:
-      track:
-        id: '#'
-        name: 'Pilot'
-        suit: 'Wingsuit'
-        place: 'Ort'
-        comment: 'Kommentar'
-        uploaded_at: 'Hochgeladen am'
   static_pages:
     index:
       title: 'Flieg! Nimm am Wettbewerb teil! Gewinne!'

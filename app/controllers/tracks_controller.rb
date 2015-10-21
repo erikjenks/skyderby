@@ -5,18 +5,39 @@ class TracksController < ApplicationController
     [:show, :google_maps, :google_earth, :replay, :edit, :update, :destroy]
 
   def index
-    @tracks = Track.accessible_by(current_user).order('id DESC')
+    @tracks = Track.accessible_by(current_user)
 
     apply_filters!
+    apply_order!
 
     respond_to do |format|
       format.any(:html, :js) do
-        @tracks = @tracks.includes(
+        @tracks = @tracks.select(
+          %(
+            tracks.*,
+            time.result AS time_result,
+            time.range_from AS time_range_from,
+            time.range_to AS time_range_to,
+            distance.result AS distance_result,
+            distance.range_from AS distance_range_from,
+            distance.range_to AS distance_range_to,
+            speed.result AS speed_result,
+            speed.range_from AS speed_range_from,
+            speed.range_to AS speed_range_to
+          )
+        ).joins(
+          %(
+            LEFT JOIN track_results AS time
+              ON time.track_id = tracks.id AND time.discipline = 0
+            LEFT JOIN track_results AS distance
+              ON distance.track_id = tracks.id AND distance.discipline = 1
+            LEFT JOIN track_results AS speed
+              ON speed.track_id = tracks.id AND speed.discipline = 2
+          )
+        ).includes(
+          :video,
           :place,
           :pilot,
-          :time,
-          :distance,
-          :speed,
           :wingsuit,
           wingsuit: [:manufacturer]
         ).paginate(page: params[:page], per_page: 50)
@@ -172,12 +193,34 @@ class TracksController < ApplicationController
   end
 
   def apply_filters!
-    return unless params[:query]
+    query = params[:query]
 
-    if params[:query][:profile_id]
-      @tracks = @tracks.where(user_profile_id: params[:query][:profile_id])
+    return unless query
+
+    @tracks = @tracks.where(user_profile_id: query[:profile_id]) if query[:profile_id]
+    @tracks = @tracks.where(wingsuit_id: query[:suit_id]) if query[:suit_id]
+    @tracks = @tracks.where(place_id: query[:place_id]) if query[:place_id]
+
+    if query[:kind]
+      @tracks = @tracks.base if query[:kind] == 'base'
+      @tracks = @tracks.skydive if query[:kind] == 'skydive'
     end
 
-    @tracks = @tracks.search(params[:query][:term]) if params[:query][:term]
+    @tracks = @tracks.search(query[:term]) if query[:term]
+  end
+
+  def apply_order!
+    order = params[:order] || ''
+    order_params = order.split(' ')
+
+    order_field = order_params[0] || 'id'
+    order_direction = order_params[1] || 'DESC'
+
+    allowed_fields = %w(ID RECORDED_AT)
+    allowed_directions = %w(ASC DESC)
+    return unless allowed_fields.include?(order_field.upcase) ||
+                  allowed_directions.include?(order_direction.upcase)
+
+    @tracks = @tracks.order(order_field + ' ' + order_direction)
   end
 end

@@ -27,6 +27,7 @@
   - columns_count = 7 
   - columns_count += 1 if @competition.display_highest_speed
   - columns_count += 1 if @competition.display_highest_gr
+  - columns_count += 1 if @competition.worldwide?
 
   - if best_results.count > 2
     .row.top-buffer-30
@@ -46,12 +47,14 @@
             %th= '#'
             %th=t 'activerecord.attributes.track.name'
             %th=t 'activerecord.attributes.track.suit'
+            - if @competition.worldwide?
+              %th= t 'activerecord.attributes.track.place'
             %th.text-right= 'Result'
             - if @competition.display_highest_speed
               %th.text-right= 'Best speed'
             - if @competition.display_highest_gr
               %th.text-right= 'Best G/R'
-            %th.text-right=t 'activerecord.attributes.track.uploaded_at'
+            %th.text-right=t 'activerecord.attributes.track.recorded_at'
             %th
         %tbody
           - results_by_pilot.each_with_index do |result, index|
@@ -63,6 +66,8 @@
                 %a{href: user_profile_path(best_result.user_profile_id), data: {toggle: 'tooltip'}, title: t('.show_profile')}
                   = best_result.user_profile.name.titleize
               %td= suit_presentation(best_result.wingsuit)
+              - if @competition.worldwide?
+                %td= track_place(best_result.track)
               %td.text-right
                 %a{href: track_path(best_result.track_id), data: {toggle: 'tooltip'}, title: t('.show_details')}
                   = format_result(best_result.result, @competition)
@@ -70,7 +75,7 @@
                 %td.text-right= (best_result.highest_speed || 0.0).round(1)
               - if @competition.display_highest_gr
                 %td.text-right= (best_result.highest_gr || 0.0).round(2)
-              %td.text-right= best_result.track.created_at.strftime('%d.%m.%Y')
+              %td.text-right= best_result.track.recorded_at.strftime('%d.%m.%Y')
               %td
                 - if best_result.track.video
                   %i.fa.fa-video-camera
@@ -83,6 +88,8 @@
                     - all_results.each do |comp_result|
                       %tr
                         %td= suit_presentation(comp_result.wingsuit)
+                        - if @competition.worldwide?
+                          %td= track_place(comp_result.track)
                         %td.text-right
                           %a.text-info{href: track_path(comp_result.track_id), data: {toggle: 'tooltip'}, title: t('.show_details')}
                             = format_result(comp_result.result, @competition)

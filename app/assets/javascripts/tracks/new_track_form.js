@@ -50,7 +50,7 @@ NewTrackForm.prototype = {
 
         this.$form_location.val(this.location);
 
-        new Skyderby.helpers.TrackSuitSelect(this.$form_suit_select);
+        new Skyderby.helpers.SuitSelect(this.$form_suit_select);
         this.init_form_validation();
 
         this.$form_toggle_suit.data('state', 'select');
@@ -82,13 +82,13 @@ NewTrackForm.prototype = {
                 },
                 'track[file]': {
                     required: true,
-                    extension: 'csv|gpx|tes',
+                    extension: 'csv|gpx|tes|kml',
                     filesize: 3145728 // 3 Mb
                 }
             },
             messages: {
                 'track[file]': {
-                    extension: 'Please enter file with valid extension (csv, gpx, tes)',
+                    extension: 'Please enter file with valid extension (csv, gpx, tes, kml)',
                     filesize: 'File should be less than 1MB'
                 },
                 'track[suit]': {
