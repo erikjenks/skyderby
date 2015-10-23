@@ -3,7 +3,6 @@ en:
     header:
       home: 'SKY DERBY'
       tracks: 'Tracks'
-      about: 'About project'
       sign_in: 'Log in'
       sign_up: 'Sign up'
       sign_out: 'Sign out'

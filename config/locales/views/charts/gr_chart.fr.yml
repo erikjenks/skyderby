@@ -1,0 +1,7 @@
+fr:
+  charts:
+    gr:
+      title: 'Finesse'
+      series:
+        gr: 'Finesse'
+        raw_gr: 'Finesse (Brut)'

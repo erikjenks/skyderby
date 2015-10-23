@@ -1,0 +1,33 @@
+fr:
+  events:
+    show:
+      section: 'Classe'
+      competitor: 'Compétiteur'
+      round: 'Manche'
+      round_map_view: 'Track de la manche sur la carte'
+      comp_window: 'Fenêtre de la compétition'
+      total: 'Total'
+      profile: 'Profil'
+      profile_caption: "Le pilote que vous recherchez n'existe pas"
+      toggle_profile: "Création d'un nouveau profil"
+      profile_placeholder: 'Sélectionner le pilote dans la liste' 
+      profile_or: 'Ou'
+      profile_choose: 'Sélectionner le pilote dans la liste'
+      suit: 'Combinaison:'
+      suit_placeholder: 'Sélectionner la combinaison dans la liste'
+      new: 'Nouveau'
+      edit: 'Éditer'
+      organizers: 'Organisateurs'
+      organizers_placeholder: "Ajouter l'organisateur à partir de la liste"
+      place_placeholder: 'Sélectionner le lieu dans la liste:'
+      result: 'Résultat'
+      result_file: 'Fichier de la Track'
+      result_or: 'Ou'
+      result_in: 'dans'
+      delete_result: 'Effacer résultat'
+      toggle_new_track: 'Télécharger un nouveau'
+      toggle_existed_track: 'Sélectionner une Track existante'
+      event_sponsors: "Sponsor de l'évênement"
+      add_sponsor: 'Ajouter un sponsor'
+      judges: 'Juges'
+      add_judge: 'Ajouter juge'

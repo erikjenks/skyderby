@@ -1,0 +1,17 @@
+fr:
+  application:
+    header:
+      home: 'SKY DERBY'
+      tracks: 'Tracks'
+      sign_in: 'Se connecter'
+      sign_up: "S'enregistrer"
+      sign_out: 'Se désinscrire'
+      login_email: 'Adresse Email'
+      password: 'Mot de passe'
+      remember_me: 'Se souvenir de moi'
+      forgot_pass: 'Mot de passe oublié ?'
+      profile: 'Profil'
+      upload_track: "Télécharger une Track"
+      competitions: "Compétitions"
+      online_competitions: 'Compétitons en ligne'
+      places: 'Lieux'
