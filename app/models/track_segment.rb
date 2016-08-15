@@ -20,6 +20,7 @@ class TrackSegment
       [end_point[:latitude], end_point[:longitude]],
     )
   end
+  alias_method :straight_line_distance, :distance
 
   def speed
     distance / time.to_f * 3.6

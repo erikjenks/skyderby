@@ -30,7 +30,7 @@ class WindowRangeFinder
     interpolated_point = 
       interpolate_by_altitude(points[index - 1], points[index], altitude)
     
-    @points = [interpolated_point] + points[index..-1)]
+    @points = [interpolated_point] + points[index..-1]
   end
 
   def to_altitude(altitude)
