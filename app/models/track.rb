@@ -29,6 +29,8 @@
 #
 
 class Track < ActiveRecord::Base
+  attr_accessor :skip_jobs
+
   enum kind:       [:skydive, :base]
   enum visibility: [:public_track, :unlisted_track, :private_track]
   enum gps_type:   [:gpx, :flysight, :columbus, :wintec, :cyber_eye, :kml]
@@ -58,8 +60,7 @@ class Track < ActiveRecord::Base
           -> { where(discipline: TrackResult.disciplines[:speed]) },
           class_name: 'TrackResult'
 
-  has_many :tracksegments, dependent: :destroy
-  has_many :points, -> { order :gps_time_in_seconds }, through: :tracksegments
+  has_many :points, -> { order :gps_time_in_seconds }, dependent: :destroy
   has_many :track_results, dependent: :destroy
   has_many :virtual_comp_results, dependent: :destroy
   has_many :weather_data, as: :weather_datumable
@@ -67,7 +68,7 @@ class Track < ActiveRecord::Base
   validates :name, presence: true, if: 'pilot.blank?'
 
   before_destroy :used_in_competition?
-  after_commit :perform_jobs
+  after_commit :perform_jobs, unless: :skip_jobs
 
   delegate :tracksuit?, to: :wingsuit, allow_nil: true
   delegate :wingsuit?, to: :wingsuit, allow_nil: true
@@ -103,6 +104,21 @@ class Track < ActiveRecord::Base
 
   def presentation
     "##{id} | #{recorded_at.strftime('%Y-%m-%d')} | #{comment}"
+  end
+
+  def destroy_results
+    track_results.destroy_all
+  end
+
+  def altitude_bounds
+    @altitude_bounds ||= begin
+      points_altitude = points.freq_1Hz.trimmed.pluck("#{point_altitude_field}")
+      { 
+        max_altitude: points_altitude.max,
+        min_altitude: points_altitude.min,
+        elevation:    points_altitude.max - points_altitude.min
+      }
+    end
   end
 
   private
