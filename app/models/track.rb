@@ -60,7 +60,7 @@ class Track < ActiveRecord::Base
           -> { where(discipline: TrackResult.disciplines[:speed]) },
           class_name: 'TrackResult'
 
-  has_many :points, -> { order :gps_time_in_seconds }, dependent: :destroy
+  has_many :points, -> { order :gps_time_in_seconds }, dependent: :delete_all
   has_many :track_results, dependent: :destroy
   has_many :virtual_comp_results, dependent: :destroy
   has_many :weather_data, as: :weather_datumable
@@ -131,7 +131,7 @@ class Track < ActiveRecord::Base
 
   def perform_jobs
     ResultsWorker.perform_async(id)
-    VirtualCompWorker.perform_async(id)
+    OnlineCompetitionWorker.perform_async(id)
   end
 
   class << self
