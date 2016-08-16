@@ -19,6 +19,7 @@ class ProfilesController < ApplicationController
   def show
     @profile = Profile.includes(
       :badges,
+      {personal_top_scores: :virtual_competition},
       tracks: [
         :distance,
         :speed,

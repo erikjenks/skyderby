@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160813212037) do
+ActiveRecord::Schema.define(version: 20160814115626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -423,4 +423,29 @@ ActiveRecord::Schema.define(version: 20160813212037) do
   add_index "wingsuits", ["manufacturer_id"], name: "index_wingsuits_on_manufacturer_id", using: :btree
 
   add_foreign_key "profiles", "countries"
+
+  create_view :personal_top_scores,  sql_definition: <<-SQL
+      SELECT row_number() OVER (PARTITION BY entities.virtual_competition_id ORDER BY entities.result DESC) AS rank,
+      entities.virtual_competition_id,
+      entities.track_id,
+      entities.result,
+      entities.highest_speed,
+      entities.highest_gr,
+      entities.profile_id,
+      entities.wingsuit_id,
+      entities.recorded_at
+     FROM ( SELECT DISTINCT ON (results.virtual_competition_id, tracks.profile_id) results.virtual_competition_id,
+              results.track_id,
+              results.result,
+              results.highest_speed,
+              results.highest_gr,
+              tracks.profile_id,
+              tracks.wingsuit_id,
+              tracks.recorded_at
+             FROM (virtual_comp_results results
+               LEFT JOIN tracks tracks ON ((tracks.id = results.track_id)))
+            ORDER BY results.virtual_competition_id, tracks.profile_id, results.result DESC) entities
+    ORDER BY entities.result DESC;
+  SQL
+
 end

@@ -1,4 +1,4 @@
-class VirtualCompWorker
+class OnlineCompetitionWorker
   include Sidekiq::Worker
 
   def perform(track_id)
