@@ -27,6 +27,6 @@ class TrackSegment
   end
 
   def time
-    end_point[:gps_time] - start_point[:gps_time]
+    (end_point[:gps_time] - start_point[:gps_time]).abs
   end
 end
