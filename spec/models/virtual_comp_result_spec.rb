@@ -8,7 +8,6 @@
 #  result                 :float            default(0.0)
 #  created_at             :datetime
 #  updated_at             :datetime
-#  profile_id             :integer
 #  highest_speed          :float            default(0.0)
 #  highest_gr             :float            default(0.0)
 #
