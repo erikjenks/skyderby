@@ -16,7 +16,4 @@ class RemoveTracksegments < ActiveRecord::Migration
   def down
     raise ActiveRecord::IrreversibleMigration
   end
-
-  def update_track_id_from_tracksegment
-  end
 end
