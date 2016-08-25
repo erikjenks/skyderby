@@ -18,7 +18,6 @@ class VirtualCompResult < ActiveRecord::Base
 
   validates_presence_of :virtual_competition
   validates_presence_of :track
-  validates_presence_of :profile
   validates_uniqueness_of :track_id, scope: :virtual_competition_id
 
   delegate :wingsuit, to: :track
