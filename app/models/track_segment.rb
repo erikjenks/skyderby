@@ -1,5 +1,8 @@
 class TrackSegment
   attr_reader :points, :start_point, :end_point
+
+  delegate :size, to: :points
+
   def initialize(points)
     @points = points
     @start_point = points.first

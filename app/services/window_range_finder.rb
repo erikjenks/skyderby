@@ -27,34 +27,22 @@ class WindowRangeFinder
 
     return if index < 1
 
-    interpolated_point = 
-      interpolate_by_altitude(points[index - 1], points[index], altitude)
-    
+    interpolated_point = PointInterpolation.new(
+      points[index - 1],
+      points[index]
+    ).execute(by: :altitude, with_value: altitude)
+
     @points = [interpolated_point] + points[index..-1]
   end
 
   def to_altitude(altitude)
     index = points.index { |x| x[:altitude] <= altitude }
 
-    interpolated_point = 
-      interpolate_by_altitude(points[index - 1], points[index], altitude)
+    interpolated_point = PointInterpolation.new(
+      points[index - 1],
+      points[index]
+    ).execute(by: :altitude, with_value: altitude)
 
     @points = points[0..(index - 1)] + [interpolated_point]
-  end
-
-  def interpolate_by_altitude(first, second, altitude)
-    k = (first[:altitude] - altitude) / (first[:altitude] - second[:altitude])
-
-    new_point = first.clone
-    new_point[:altitude]  = altitude
-    [:gps_time, :latitude, :longitude, :h_speed, :v_speed, :distance].each do |key|
-      new_point[key] = interpolate_field(first, second, key, k) if new_point.has_key? key
-    end
-
-    new_point
-  end
-
-  def interpolate_field(first, second, key, k)
-    first[key] + (second[key] - first[key]) * k
   end
 end
