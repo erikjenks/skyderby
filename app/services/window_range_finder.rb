@@ -1,5 +1,6 @@
 class WindowRangeFinder
-  attr_reader :points
+  class UnknownFilter   < StandardError; end
+  class ValueOutOfRange < StandardError; end
 
   # Order matters
   ALLOWED_FILTERS = [:from_altitude,
@@ -13,6 +14,8 @@ class WindowRangeFinder
   end
 
   def execute(args)
+    args.each { |filter, _| raise UnknownFilter, filter unless ALLOWED_FILTERS.include? filter }
+
     ALLOWED_FILTERS.each do |filter|
       send(filter, args[filter]) if args.has_key? filter
     end
@@ -22,10 +25,12 @@ class WindowRangeFinder
 
   private
 
+  attr_reader :points
+
   def from_altitude(altitude)
     index = points.index { |x| x[:altitude] <= altitude }
 
-    return if index < 1
+    raise ValueOutOfRange if index.nil? || index < 1
 
     interpolated_point = PointInterpolation.new(
       points[index - 1],
@@ -44,5 +49,18 @@ class WindowRangeFinder
     ).execute(by: :altitude, with_value: altitude)
 
     @points = points[0..(index - 1)] + [interpolated_point]
+  end
+
+  def from_vertical_speed(speed)
+    index = points.index { |x| x[:v_speed] >= speed }
+
+    raise ValueOutOfRange if index.nil? || index < 1
+
+    interpolated_point = PointInterpolation.new(
+      points[index - 1],
+      points[index]
+    ).execute(by: :v_speed, with_value: speed)
+
+    @points = [interpolated_point] + points[index..-1]
   end
 end

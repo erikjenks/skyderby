@@ -1,23 +1,67 @@
 require 'spec_helper'
 
 describe WindowRangeFinder do
-  it 'trim until specified altitude' do
+  context 'from_altitude filter' do
+    it 'trim until specified altitude' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      track_segment = range_finder.execute(from_altitude: 2900)
+
+      expect(track_segment.size).to eq(7)
+
+      expect(track_segment.start_point[:gps_time]).to be_within(0.1).of(15.5)
+      expect(track_segment.start_point[:altitude]).to eq(2900)
+      expect(track_segment.start_point[:latitude]).to be_within(0.000001).of(1.65)
+      expect(track_segment.start_point[:longitude]).to be_within(0.000001).of(2.35)
+      expect(track_segment.start_point[:v_speed]).to be_within(0.1).of(125)
+    end
+
+    it 'raises error if point with given altitude is first' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(from_altitude: 3050) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
+
+    it 'raises error if point not found' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(from_altitude: 3100) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
+  end
+
+  context 'to_altitude filter' do
+    it 'trim after specified altitude' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      track_segment = range_finder.execute(to_altitude: 2600)
+
+      expect(track_segment.size).to eq(6)
+
+      expect(track_segment.end_point[:gps_time]).to be_within(0.1).of(25.5)
+      expect(track_segment.end_point[:altitude]).to eq(2600)
+      expect(track_segment.end_point[:latitude]).to be_within(0.000001).of(4.95)
+      expect(track_segment.end_point[:longitude]).to be_within(0.000001).of(5.05)
+      expect(track_segment.end_point[:v_speed]).to be_within(0.1).of(155)
+    end
+  end
+
+  context 'from_vertical_speed filter' do
+    it 'trim from start by speed' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      track_segment = range_finder.execute(from_vertical_speed: 125)
+
+      expect(track_segment.size).to eq(7)
+
+      expect(track_segment.start_point[:gps_time]).to be_within(0.1).of(15.5)
+      expect(track_segment.start_point[:altitude]).to eq(2900)
+      expect(track_segment.start_point[:latitude]).to be_within(0.000001).of(1.65)
+      expect(track_segment.start_point[:longitude]).to be_within(0.000001).of(2.35)
+      expect(track_segment.start_point[:v_speed]).to be_within(0.1).of(125)
+    end
+  end
+
+  it 'raises error if given filter unsupported' do
     range_finder = WindowRangeFinder.new(sample_points)
-    track_segment = range_finder.execute(from_altitude: 2900)
-
-    expect(track_segment.size).to eq(7)
-
-    expect(track_segment.start_point[:gps_time]).to be_within(0.1).of(15.5)
-    expect(track_segment.start_point[:altitude]).to eq(2900)
-    expect(track_segment.start_point[:latitude]).to be_within(0.000001).of(1.65)
-    expect(track_segment.start_point[:longitude]).to be_within(0.000001).of(2.35)
-    expect(track_segment.start_point[:v_speed]).to be_within(0.1).of(125)
-  end
-
-  it 'trim after specified altitude' do
-  end
-
-  it 'trim from start by speed' do
+    expect{ range_finder.execute(from_some_column: 0.0) }
+      .to raise_exception(WindowRangeFinder::UnknownFilter)  
   end
 
   def sample_points
