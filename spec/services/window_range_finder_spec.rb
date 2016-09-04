@@ -58,6 +58,36 @@ describe WindowRangeFinder do
     end
   end
 
+  context 'duration filter' do
+    it 'trim after specified duration' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      track_segment = range_finder.execute(duration: 9)
+
+      expect(track_segment.size).to eq(4)
+
+      expect(track_segment.end_point[:gps_time]).to be_within(0.1).of(20)
+      expect(track_segment.end_point[:altitude]).to eq(2775)
+      expect(track_segment.end_point[:latitude]).to be_within(0.000001).of(3.025)
+      expect(track_segment.end_point[:longitude]).to be_within(0.000001).of(3.475)
+      expect(track_segment.end_point[:v_speed]).to be_within(0.1).of(137.5)
+    end
+  end
+
+  context 'elevation filter' do
+    it 'trim after specified elevation' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      track_segment = range_finder.execute(elevation: 250)
+
+      expect(track_segment.size).to eq(4)
+
+      expect(track_segment.end_point[:gps_time]).to be_within(0.1).of(19)
+      expect(track_segment.end_point[:altitude]).to eq(2800)
+      expect(track_segment.end_point[:latitude]).to be_within(0.000001).of(2.75)
+      expect(track_segment.end_point[:longitude]).to be_within(0.000001).of(3.25)
+      expect(track_segment.end_point[:v_speed]).to be_within(0.1).of(135)
+    end
+  end
+
   it 'raises error if given filter unsupported' do
     range_finder = WindowRangeFinder.new(sample_points)
     expect{ range_finder.execute(from_some_column: 0.0) }

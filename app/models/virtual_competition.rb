@@ -22,6 +22,8 @@
 #
 
 class VirtualCompetition < ActiveRecord::Base
+  BASE_START_SPEED = 10
+
   enum jumps_kind: [:skydive, :base]
   enum suits_kind: [:wingsuit, :tracksuit]
   enum discipline:
@@ -40,6 +42,25 @@ class VirtualCompetition < ActiveRecord::Base
   def reprocess_results
     virtual_comp_results.each do |x|
       OnlineCompetitionWorker.perform_async(x.track_id)
+    end
+  end
+
+  def window_params
+    case discipline
+    when 'distance', 'speed', 'time'
+      {from_altitude: range_from, to_altitude: range_to}
+    when 'distance_in_time'
+      {from_vertical_speed: BASE_START_SPEED, duration: discipline_parameter}
+    when 'distance_in_altitude'
+      {from_vertical_speed: BASE_START_SPEED, elevation: discipline_parameter}
+    end
+  end
+
+  def task
+    if ['distance_in_time', 'distance_in_altitude'].include? discipline
+      'distance'
+    else
+      discipline
     end
   end
 

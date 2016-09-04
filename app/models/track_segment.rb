@@ -32,4 +32,14 @@ class TrackSegment
   def time
     (end_point[:gps_time] - start_point[:gps_time]).abs
   end
+
+  def max_gr
+    point = @points.max_by { |x| x[:glide_ratio] }
+    point[:glide_ratio]
+  end
+
+  def max_ground_speed
+    point = @points.max_by { |x| x[:h_speed] }
+    point[:h_speed]
+  end
 end

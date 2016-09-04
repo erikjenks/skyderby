@@ -9,7 +9,7 @@ describe OnlineEventsFinder do
   let(:track2) { create :empty_track, :with_place }
 
   context 'only worldwide' do
-    subject { OnlineEventsFinder.new.execute(track1) }
+    subject { OnlineEventsFinder.new(track1).execute }
 
     it { is_expected.to include(worldwide_comp) }
     it { is_expected.not_to include(place_comp) }
@@ -17,10 +17,37 @@ describe OnlineEventsFinder do
   end
 
   context 'worldwide and place specific' do
-    subject { OnlineEventsFinder.new.execute(track2) }
+    subject { OnlineEventsFinder.new(track2).execute }
 
     it { is_expected.to include(worldwide_comp) }
     it { is_expected.to include(place_comp) }
     it { is_expected.not_to include(last_year_comp) }
+  end
+
+  it "returns blank array if track isn't public" do
+    track = create(:empty_track)
+    track.private_track!
+
+    worldwide_comp = create :online_event
+
+    expect(OnlineEventsFinder.new(track).execute).not_to include(worldwide_comp)
+  end
+
+  it "returns blank array if track from unregistered user" do
+    track = create(:empty_track)
+    track.pilot = nil
+
+    worldwide_comp = create :online_event
+
+    expect(OnlineEventsFinder.new(track).execute).not_to include(worldwide_comp)
+  end
+
+  it "returns blank array if track in custom suit" do
+    track = create(:empty_track)
+    track.wingsuit = nil
+
+    worldwide_comp = create :online_event
+
+    expect(OnlineEventsFinder.new(track).execute).not_to include(worldwide_comp)
   end
 end

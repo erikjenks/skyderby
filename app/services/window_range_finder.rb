@@ -63,4 +63,28 @@ class WindowRangeFinder
 
     @points = [interpolated_point] + points[index..-1]
   end
+
+  def duration(time)
+    lookup_time = points.first[:gps_time] + time.seconds
+    
+    index = points.index { |x| x[:gps_time] >= lookup_time }
+    interpolated_point = PointInterpolation.new(
+      points[index - 1],
+      points[index]
+    ).execute(by: :gps_time, with_value: lookup_time)
+
+    @points = points[0..(index - 1)] + [interpolated_point]
+  end
+
+  def elevation(altitude)
+    lookup_altitude = points.first[:altitude] - altitude
+
+    index = points.index { |x| x[:altitude] <= lookup_altitude }
+    interpolated_point = PointInterpolation.new(
+      points[index - 1],
+      points[index]
+    ).execute(by: :altitude, with_value: lookup_altitude)
+
+    @points = points[0..(index - 1)] + [interpolated_point]
+  end
 end

@@ -6,7 +6,7 @@ class TrackResultsService
   end
 
   def execute
-    track.destroy_results  
+    track.delete_results  
     
     track_segments = ranges_to_score.map do |range|
       WindowRangeFinder.new(track_points)
@@ -15,11 +15,11 @@ class TrackResultsService
     end
 
     [:speed, :distance, :time].each do |task|
-      best_task_result = track_segments.max_by { |x| x.send(task) }
+      best_task_result = track_segments.max_by { |x| x.public_send(task) }
       track.track_results.create(discipline: task,
                                  range_from: best_task_result.start_altitude,
                                  range_to:   best_task_result.end_altitude,
-                                 result:     best_task_result.send(task))
+                                 result:     best_task_result.public_send(task))
     end
   end
 
@@ -32,7 +32,6 @@ class TrackResultsService
         "#{@track.point_altitude_field} AS altitude",
         :latitude,
         :longitude)
-    @track_points
   end
 
   def ranges_to_score

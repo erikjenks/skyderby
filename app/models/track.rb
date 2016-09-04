@@ -106,8 +106,12 @@ class Track < ActiveRecord::Base
     "##{id} | #{recorded_at.strftime('%Y-%m-%d')} | #{comment}"
   end
 
-  def destroy_results
-    track_results.destroy_all
+  def delete_results
+    track_results.delete_all
+  end
+
+  def delete_online_competitions_results
+    virtual_comp_results.delete_all
   end
 
   def altitude_bounds
