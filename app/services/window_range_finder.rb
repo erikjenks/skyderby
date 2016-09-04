@@ -30,7 +30,14 @@ class WindowRangeFinder
   def from_altitude(altitude)
     index = points.index { |x| x[:altitude] <= altitude }
 
-    raise ValueOutOfRange if index.nil? || index < 1
+    raise ValueOutOfRange if index.nil?
+    needs_interpolation = points[index][:altitude] != altitude
+
+    # raise if previous point is missed 
+    # i.e. current is first and iterpolation needed
+    raise ValueOutOfRange if index.zero? && needs_interpolation
+
+    return unless needs_interpolation
 
     interpolated_point = PointInterpolation.new(
       points[index - 1],
@@ -43,6 +50,8 @@ class WindowRangeFinder
   def to_altitude(altitude)
     index = points.index { |x| x[:altitude] <= altitude }
 
+    raise ValueOutOfRange if index.nil? || index.zero?
+
     interpolated_point = PointInterpolation.new(
       points[index - 1],
       points[index]
@@ -54,7 +63,14 @@ class WindowRangeFinder
   def from_vertical_speed(speed)
     index = points.index { |x| x[:v_speed] >= speed }
 
-    raise ValueOutOfRange if index.nil? || index < 1
+    raise ValueOutOfRange if index.nil?
+    needs_interpolation = points[index][:v_speed] != speed
+
+    # raise if previous point is missed 
+    # i.e. current is first and iterpolation needed
+    raise ValueOutOfRange if index.zero? && needs_interpolation
+
+    return unless needs_interpolation
 
     interpolated_point = PointInterpolation.new(
       points[index - 1],
@@ -68,6 +84,9 @@ class WindowRangeFinder
     lookup_time = points.first[:gps_time] + time.seconds
     
     index = points.index { |x| x[:gps_time] >= lookup_time }
+
+    raise ValueOutOfRange if index.nil? || index.zero?
+
     interpolated_point = PointInterpolation.new(
       points[index - 1],
       points[index]
@@ -80,6 +99,9 @@ class WindowRangeFinder
     lookup_altitude = points.first[:altitude] - altitude
 
     index = points.index { |x| x[:altitude] <= lookup_altitude }
+
+    raise ValueOutOfRange if index.nil? || index.zero?
+
     interpolated_point = PointInterpolation.new(
       points[index - 1],
       points[index]

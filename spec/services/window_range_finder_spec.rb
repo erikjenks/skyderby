@@ -41,6 +41,18 @@ describe WindowRangeFinder do
       expect(track_segment.end_point[:longitude]).to be_within(0.000001).of(5.05)
       expect(track_segment.end_point[:v_speed]).to be_within(0.1).of(155)
     end
+
+    it 'raises error if point with given altitude is first' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(to_altitude: 3050) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
+
+    it 'raises error if point not found' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(to_altitude: 2300) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
   end
 
   context 'from_vertical_speed filter' do
@@ -55,6 +67,18 @@ describe WindowRangeFinder do
       expect(track_segment.start_point[:latitude]).to be_within(0.000001).of(1.65)
       expect(track_segment.start_point[:longitude]).to be_within(0.000001).of(2.35)
       expect(track_segment.start_point[:v_speed]).to be_within(0.1).of(125)
+    end
+
+    it 'raises error if point with given altitude is first' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(from_vertical_speed: 90) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
+
+    it 'raises error if point not found' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(from_vertical_speed: 2300) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
     end
   end
 
@@ -71,6 +95,18 @@ describe WindowRangeFinder do
       expect(track_segment.end_point[:longitude]).to be_within(0.000001).of(3.475)
       expect(track_segment.end_point[:v_speed]).to be_within(0.1).of(137.5)
     end
+
+    it 'raises error if point with given altitude is first' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(duration: 0) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
+
+    it 'raises error if point not found' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(duration: 300) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
   end
 
   context 'elevation filter' do
@@ -86,6 +122,19 @@ describe WindowRangeFinder do
       expect(track_segment.end_point[:longitude]).to be_within(0.000001).of(3.25)
       expect(track_segment.end_point[:v_speed]).to be_within(0.1).of(135)
     end
+
+    it 'raises error if point with given altitude is first' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(elevation: 0) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
+
+    it 'raises error if point not found' do
+      range_finder = WindowRangeFinder.new(sample_points)
+      expect{ range_finder.execute(elevation: 3000) }
+        .to raise_exception(WindowRangeFinder::ValueOutOfRange)
+    end
+
   end
 
   it 'raises error if given filter unsupported' do

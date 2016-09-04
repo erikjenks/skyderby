@@ -25,6 +25,8 @@ class OnlineCompetitionsService
       result: track_segment.public_send(competition.task),
       highest_gr: track_segment.max_gr,
       highest_speed: track_segment.max_ground_speed)
+  rescue WindowRangeFinder::ValueOutOfRange
+    return
   end
 
   def track_points
