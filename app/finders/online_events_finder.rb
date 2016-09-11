@@ -15,7 +15,7 @@ class OnlineEventsFinder
 
     comps = comps.where(
       ':period BETWEEN period_from AND period_to',
-      period: track.created_at
+      period: track.recorded_at
     )
 
     comps =

@@ -17,7 +17,7 @@ describe WindowRangeFinder do
 
     it 'raises error if point with given altitude is first' do
       range_finder = WindowRangeFinder.new(sample_points)
-      expect{ range_finder.execute(from_altitude: 3050) }
+      expect{ range_finder.execute(from_altitude: 3100) }
         .to raise_exception(WindowRangeFinder::ValueOutOfRange)
     end
 

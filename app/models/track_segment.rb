@@ -34,7 +34,8 @@ class TrackSegment
   end
 
   def max_gr
-    point = @points.max_by { |x| x[:glide_ratio] }
+    gr_treshold_in_kmh = 50
+    point = @points.max_by { |x| x[:h_speed] > gr_treshold_in_kmh ? x[:glide_ratio] : 0 }
     point[:glide_ratio]
   end
 
