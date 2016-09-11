@@ -35,10 +35,15 @@ class TournamentMatchCompetitor < ActiveRecord::Base
     return unless track
     return if (result || 0) > 0
 
-    track_points = Skyderby::Tracks::Points.new(track)
-    self.result = Skyderby::ResultsProcessors::TimeUntilIntersection.new(
-      track_points, start_time: start_time, finish_line: tournament_match.tournament.finish_line
-    ).calculate
+    begin
+      self.result = Skyderby::ResultsProcessors::TimeUntilIntersection.new(
+        track_points, start_time: start_time, finish_line: tournament_match.tournament.finish_line
+      ).calculate
+    rescue Skyderby::ResultsProcessors::TimeUntilIntersection::IntersectionNotFound
+      self.result = 0
+      self.is_disqualified = true
+      self.notes = "Didn't intersected finish line"
+    end
   end
 
   def track_points

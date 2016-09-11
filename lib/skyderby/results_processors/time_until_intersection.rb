@@ -1,13 +1,13 @@
 require 'geometry/geometry'
-require 'tracks/points_interpolation'
 
 module Skyderby
   module ResultsProcessors
     class TimeUntilIntersection
-      def initialize(track_points, params)
-        @track_points = track_points.points
+      class IntersectionNotFound < StandardError; end
 
-        validate! params
+      def initialize(track_points, params)
+        @track_points = track_points
+
         @start_time = params[:start_time]
         @finish_segment = flight_segment(params[:finish_line])
       end
@@ -19,7 +19,7 @@ module Skyderby
             segment.intersects_with? @finish_segment
           end
 
-        return nil unless intersected_segment
+        raise IntersectionNotFound unless intersected_segment
 
         segment = flight_segment(intersected_segment)
         intersection_point = segment.intersection_point_with(@finish_segment)
@@ -29,31 +29,29 @@ module Skyderby
           intersection_point.y
         )
 
-        finish_time = PointsInterpolation.find_between(
+        interpolate_by_field = interpolation_field(intersected_segment)
+        finish_time = PointInterpolation.new(
           intersected_segment.first,
-          intersected_segment.last,
-          interpolation_coeff(intersected_segment, hash_point)
-        ).gps_time
+          intersected_segment.last
+        ).execute(
+          by: interpolate_by_field,
+          with_value: hash_point[interpolate_by_field]
+        )[:gps_time]
+
         (finish_time.to_f - @start_time.to_f).round(3)
       end
 
       private
 
-      def validate!(params)
-        fail ArgumentError, 'Params should be the hash' unless params.is_a? Hash
-        fail ArgumentError, 'Params should contain start_time' unless params[:start_time]
-        fail ArgumentError, 'Params should contain finish_line' unless params[:finish_line]
-      end
-
       def flight_segment(pair)
         mercator_start = Skyderby::Geospatial.coordinates_to_mercator(
-          pair.first.latitude,
-          pair.first.longitude
+          pair.first[:latitude],
+          pair.first[:longitude]
         )
 
         mercator_end = Skyderby::Geospatial.coordinates_to_mercator(
-          pair.last.latitude,
-          pair.last.longitude
+          pair.last[:latitude],
+          pair.last[:longitude]
         )
 
         Geometry::Segment.new_by_arrays(
@@ -62,18 +60,13 @@ module Skyderby
         )
       end
 
-      def interpolation_coeff(segment, hash_point)
-        interpolate_by_lat =
-          (segment.first.latitude - segment.last.latitude).abs >
-          (segment.first.longitude - segment.last.longitude).abs
-
-        if interpolate_by_lat
-          (segment.first.latitude - hash_point[:latitude]) /
-            (segment.first.latitude - segment.last.latitude)
+      def interpolation_field(segment)
+        if (segment.first[:latitude] - segment.last[:latitude]).abs >
+          (segment.first[:longitude] - segment.last[:longitude]).abs
+          :latitude
         else
-          (segment.first.longitude - hash_point[:longitude]) /
-            (segment.first.longitude - segment.last.longitude)
-        end.abs
+          :longitude
+        end
       end
     end
   end
