@@ -36,15 +36,20 @@ class TournamentMatchCompetitor < ActiveRecord::Base
     return if (result || 0) > 0
 
     begin
-      self.result = Skyderby::ResultsProcessors::TimeUntilIntersection.new(
-        track_points, start_time: start_time, finish_line: tournament_match.tournament.finish_line
-      ).calculate
-    rescue Skyderby::ResultsProcessors::TimeUntilIntersection::IntersectionNotFound
+      intersection_point = PathIntersectionFinder.new(
+        track_points, 
+        finish_line
+      ).execute
+      
+      self.result = (intersection_point[:gps_time].to_f - start_time.to_f).round(3)
+    rescue PathIntersectionFinder::IntersectionNotFound
       self.result = 0
       self.is_disqualified = true
       self.notes = "Didn't intersected finish line"
     end
   end
+  
+  private
 
   def track_points
     track.points
@@ -58,7 +63,9 @@ class TournamentMatchCompetitor < ActiveRecord::Base
            :longitude)
   end
 
-  private
+  def finish_line
+    tournament_match.tournament.finish_line
+  end
 
   def replace_nan_with_zero
     return if result.nil?
