@@ -85,7 +85,7 @@ class Track < ActiveRecord::Base
       elsif place_msl
         place_msl
       else
-        points.minimum(:abs_altitude)
+        points.minimum(:abs_altitude) || 0
       end
     end
   end
