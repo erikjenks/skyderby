@@ -37,7 +37,8 @@ Skyderby::Application.routes.draw do
       scope module: :events do
         resources :rounds do
           scope module: :rounds do
-            resources :map, only: :index
+            resource :map, only: :show
+            resource :globe, controller: 'globe', only: :show
           end
         end
 

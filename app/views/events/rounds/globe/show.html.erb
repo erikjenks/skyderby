@@ -1,0 +1,12 @@
+<% provide :title, @event.name %>
+
+<%= render 'round_globe' %>
+
+<% content_for :page_js do %>
+  <script>
+    new Skyderby.views.RoundGlobeView({
+      el: '.round-globe',
+      competitors: <%= @round_map.to_json %>
+    });
+  </script>
+<% end %>

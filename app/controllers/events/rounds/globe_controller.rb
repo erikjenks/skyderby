@@ -1,7 +1,7 @@
-class Events::Rounds::MapController < ApplicationController
+class Events::Rounds::GlobeController < ApplicationController
   before_action :set_round, :load_event
 
-  def index
+  def show
     @round_map = ::Events::Rounds::Map.new(@round).build
   end
 
