@@ -53,20 +53,18 @@ class TracksController < ApplicationController
 
     process_range if params[:range]
 
-    @track_presenter = presenter_class.new(
+    @track_presenter = Tracks::TrackPresenter.for(@track.gps_type).new(
       @track,
       params[:f],
       params[:t],
-      preferred_speed_units,
-      preferred_distance_units,
-      preferred_altitude_units
+      units
     )
-    
+
     @track_presenter.load
 
     respond_to do |format|
       format.html { LastViewedUpdateJob.perform_later(@track.id) }
-      format.js 
+      format.js
       format.json { @track_data }
     end
   end
@@ -144,18 +142,17 @@ class TracksController < ApplicationController
   helper_method :index_params
 
   def show_params
-    params.permit(:range, :f, :t, :charts_mode, :charts_units) 
+    params.permit(:range, :f, :t, :charts_mode, :charts_units)
   end
   helper_method :show_params
 
   def process_range
     range = params[:range].split(';')
-    params[:f] = Distance.new(range.first, preferred_altitude_units).truncate
-    params[:t] = Distance.new(range.last,  preferred_altitude_units).truncate
+    params[:f] = Distance.new(range.first, units[:altitude]).truncate
+    params[:t] = Distance.new(range.last,  units[:altitude]).truncate
   end
 
-  def presenter_class
-    return Tracks::TrackPresenter if @track.flysight? || @track.cyber_eye?
-    Tracks::RawTrackPresenter
+  def units
+    Units[preferred_charts_units]
   end
 end

@@ -61,10 +61,10 @@ module Events
                                  t: @event.range_to)
         end
         format.js do
-          @track_data = Tracks::CompetitionTrack.new(@event_track,
-                                                     preferred_speed_units,
-                                                     preferred_distance_units,
-                                                     preferred_altitude_units)
+          @track_data = Tracks::TrackPresenter::Competition.new(
+            @event_track,
+            Units[preferred_charts_units]
+          )
           @track_data.load
         end
       end
