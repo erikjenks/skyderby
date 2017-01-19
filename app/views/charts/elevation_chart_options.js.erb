@@ -73,6 +73,15 @@
     tooltip: {
       valueSuffix: ' <%= t('units.' + altitude_units) %>',
     }
+  },
+  {
+    name: I18n.t('charts.elev.series.straightline_distance'),
+    code: 'straightline_distance',
+    pointInterval: 10,
+    visible: false,
+    tooltip: {
+      valueSuffix: ' <%= t('units.' + distance_units) %>',
+    }
   }
   ]
 }

@@ -5,6 +5,7 @@ ru:
       axis:
         distance: "Дистанция, %{unit}"
       series:
-        elevation: "Пройдено по высоте"
-        distance: "Пройдено Расстояние"
-        height: "Высота"
+        elevation: Пройдено по высоте
+        distance: Пройдено Расстояние
+        straightline_distance: Дистанция по прямой
+        height: Высота

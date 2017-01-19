@@ -11,6 +11,10 @@ module PreferencesHelper
     session[:preferred_charts_units]
   end
 
+  def preferred_distance_mode
+    session[:preferred_distance_mode] = params[:distance_mode] || 'trajectory'
+  end
+
   def preferred_distance_units
     distance_units_by_type(preferred_charts_units)
   end

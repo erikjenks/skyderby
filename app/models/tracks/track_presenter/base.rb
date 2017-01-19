@@ -120,6 +120,19 @@ module Tracks
         end.to_json
       end
 
+      def straightline_speed_chart_line
+        first_point = @points.first
+        chart_points = @points.map do |x|
+          [
+            (x[:gps_time] - min_gps_time).round(1),
+            speed_presentation(TrackSegment.new([first_point, x]).speed / 3.6)
+          ]
+        end
+
+        chart_points.first[1] = chart_points.second[1]
+        chart_points.to_json
+      end
+
       def elevation_chart_line
         return [] if @points.blank?
 
@@ -136,6 +149,16 @@ module Tracks
           [
             (pair.last[:gps_time] - min_gps_time).round(1),
             distance_presentation(tmp_distance += TrackSegment.new(pair).distance)
+          ]
+        end.to_json
+      end
+
+      def straightline_distance_chart_line
+        first_point = @points.first
+        @points.map do |point|
+          [
+            (point[:gps_time] - min_gps_time).round(1),
+            distance_presentation(TrackSegment.new([first_point, point]).distance)
           ]
         end.to_json
       end

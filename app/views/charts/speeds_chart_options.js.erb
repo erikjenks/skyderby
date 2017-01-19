@@ -75,6 +75,15 @@
     tooltip: {
       valueSuffix: ' <%= t('units.' + speed_units) %>',
     }
+  },
+  {
+    name: I18n.t('charts.spd.series.straightline'),
+    code: 'straightline_speed',
+    // color: '#D6A184',
+    visible: false,
+    tooltip: {
+      valueSuffix: ' <%= t('units.' + speed_units) %>',
+    }
   }
   <% if display_raw %>
     ,{
